@@ -1,15 +1,17 @@
+const { ModuleFederationPlugin } = require('webpack').container;
+
 module.exports = {
   publicPath: '/micro-app/vue2/',
   outputDir: 'vue2',
   productionSourceMap: false,
   devServer: {
     hot: true,
-    disableHostCheck: true,
+    // disableHostCheck: true,
     port: 4001,
-    overlay: {
-      warnings: false,
-      errors: true,
-    },
+    // overlay: {
+    //   warnings: false,
+    //   errors: true,
+    // },
     headers: {
       'Access-Control-Allow-Origin': '*',
     },
@@ -19,7 +21,22 @@ module.exports = {
   // 自定义webpack配置
   configureWebpack: {
     output: {
-      jsonpFunction: `webpackJsonp-chile-vue2`,
-    }
+      // jsonpFunction: `webpackJsonp-chile-vue2`,
+    },
+    plugins:[
+      new ModuleFederationPlugin({
+        name:'childVue2',
+        filename:'remoteEntry.js',
+        shared:[
+          'vue','vue-router'
+        ],
+        exposes:{
+          './test':'./src/pages/page2.vue'
+        }
+      })
+    ]
   },
+  chainWebpack: config => {
+    config.optimization.delete('splitChunks')      
+  },  
 }

@@ -41,15 +41,19 @@
       </el-menu>
     </div>
     <div class="router-con">
-      <router-view/>
+      <router-view style="height:50%" />
+      <testRemote style="height:50%"/>
     </div>
   </div>
 </template>
 
 <script>
-
+// import testRemote from 'childVue2/test'
 export default {
   name: 'App',
+  components:{
+    testRemote: () => import('childVue2/test')
+  },
   data () {
     return {
       activeIndex: '/react16/',
